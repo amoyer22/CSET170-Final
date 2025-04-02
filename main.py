@@ -54,7 +54,7 @@ def login():
                 else:
                     message = "ERROR: Login failed."
             else:
-                message = "ERROR: Credentials not registered. Please create an account."
+                message = "ERROR: Incorrect credentials."
         except:
             message = "ERROR: Login function failed."
     return render_template("login.html", message=message)
@@ -69,6 +69,10 @@ def home_admin():
     message = None
     return render_template("home_admin.html", message=message)
 
+@app.route("/admin/view/accountname")
+def account_view_admin():
+    message = None
+    return render_template("account_view_admin.html", message=message)
 
 if __name__ == "__main__":
     app.run(debug=True)
