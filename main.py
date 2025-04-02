@@ -41,16 +41,22 @@ def login():
                         {"username": username, "password": password}).first()
             if login:
                 approved = login[8]
-                if approved == "Yes":
-                    return redirect('/home')
-                elif approved == "No":
-                    message = "Your account has not been approved. Please wait for admin approval."
+                admin = login[9]
+                if admin == "Yes":
+                    return redirect('/admin/home')
+                elif admin == "No":
+                    if approved == "Yes":
+                        return redirect('/home')
+                    elif approved == "No":
+                        message = "Your account has not been approved. Please wait for admin approval."
+                    else:
+                        message = "ERROR: Login failed."
                 else:
                     message = "ERROR: Login failed."
             else:
-                message = "ERROR: Login failed."
+                message = "ERROR: Credentials not registered. Please create an account."
         except:
-            message = "ERROR: Login failed."
+            message = "ERROR: Login function failed."
     return render_template("login.html", message=message)
 
 @app.route("/home")
