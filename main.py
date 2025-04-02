@@ -59,7 +59,7 @@ def login():
             message = "ERROR: Login function failed."
     return render_template("login.html", message=message)
 
-@app.route("/home")
+@app.route("/user/home")
 def home_user():
     message = None
     return render_template("home_user.html", message=message)
