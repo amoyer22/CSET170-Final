@@ -67,7 +67,9 @@ def home_user():
 @app.route("/admin/home")
 def home_admin():
     message = None
-    return render_template("home_admin.html", message=message)
+    unapproveds = conn.execute(text("SELECT * FROM users WHERE approved = 'No' AND admin != 'Yes'")).all()
+    approveds = conn.execute(text("SELECT * FROM users WHERE approved = 'Yes' AND admin != 'Yes'")).all()
+    return render_template("home_admin.html", message=message, unapproveds=unapproveds, approveds=approveds)
 
 @app.route("/admin/view/accountname")
 def account_view_admin():

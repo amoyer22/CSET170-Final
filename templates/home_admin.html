@@ -13,32 +13,32 @@
     <div>
         <h3>Unapproved Accounts</h3>
         <ul>
-            <li>
-                <p style="display: inline;">randomnewuser1</p>
-                <button style="display: inline;">Approve</button>
-            </li>
-            <li>
-                <p style="display: inline;">randomnewuser2</p>
-                <button style="display: inline;">Approve</button>
-            </li>
-            <li>
-                <p style="display: inline;">randomnewuser3</p>
-                <button style="display: inline;">Approve</button>
-            </li>
+            {% if unapproveds %}
+                {% for unapproved in unapproveds %}
+                    <li>
+                        <p style="display: inline;">{{unapproved[6]}}</p>
+                        <button style="display: inline;">Approve</button>
+                    </li>
+                {% endfor %}
+                {% else %}
+                    <p>No accounts need approved at this time.</p>
+            {% endif %}
         </ul>
     </div>
 
     <div>
         <h3>Approved Accounts</h3>
         <ul>
-            <li>
-                <p style="display: inline;">registereduser1</p>
-                <button onclick="location.href='/admin/view/accountname'" style="display: inline;">View Account</button>
-            </li>
-            <li>
-                <p style="display: inline;">registereduser2</p>
-                <button onclick="location.href='/admin/view/accountname'" style="display: inline;">View Account</button>
-            </li>
+            {% if approveds %}
+                {% for approved in approveds %}
+                    <li>
+                        <p style="display: inline;">{{approved[6]}}</p>
+                        <button onclick="location.href='/admin/view/accountname'" style="display: inline;">View Account</button>
+                    </li>
+                {% endfor %}
+                {% else %}
+                    <p>No accounts have been approved.</p>
+            {% endif %}
         </ul>
     </div>
 </body>
