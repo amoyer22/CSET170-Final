@@ -34,13 +34,19 @@ def signup():
 def login():
     message = None
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+        username = request.form["username"]
+        password = request.form["password"]
         try:
             login = conn.execute(text("SELECT * FROM users WHERE username = :username AND password = :password"),
-                        {"username": username, "password": password})
+                        {"username": username, "password": password}).first()
             if login:
-                return redirect('/home')
+                approved = login[8]
+                if approved == "Yes":
+                    return redirect('/home')
+                elif approved == "No":
+                    message = "Your account has not been approved. Please wait for admin approval."
+                else:
+                    message = "ERROR: Login failed."
             else:
                 message = "ERROR: Login failed."
         except:
@@ -48,9 +54,14 @@ def login():
     return render_template("login.html", message=message)
 
 @app.route("/home")
-def user_home():
+def home_user():
     message = None
-    return render_template("user_home.html", message=message)
+    return render_template("home_user.html", message=message)
+
+@app.route("/admin/home")
+def home_admin():
+    message = None
+    return render_template("home_admin.html", message=message)
 
 
 if __name__ == "__main__":
