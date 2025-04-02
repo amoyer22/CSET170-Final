@@ -46,7 +46,7 @@ def login():
                     return redirect('/admin/home')
                 elif admin == "No":
                     if approved == "Yes":
-                        return redirect('/home')
+                        return redirect('/user/home')
                     elif approved == "No":
                         message = "Your account has not been approved. Please wait for admin approval."
                     else:
