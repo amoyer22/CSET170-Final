@@ -80,7 +80,7 @@ def home_admin():
             try:
                 user_id = request.form.get("approve")
                 account_number = account_num_rng()
-                conn.execute(text("UPDATE users SET approved = 'Yes', account_number = :account_number WHERE id = :user_id"),
+                conn.execute(text("UPDATE users SET approved = 'Yes', account_number = :account_number, balance = 0.00 WHERE id = :user_id"),
                             {"user_id": user_id, "account_number": account_number})
                 conn.commit()
                 message = "User approved successfully."
@@ -94,7 +94,7 @@ def home_admin():
 @app.route("/admin/view/<username>")
 def account_view_admin(username):
     try:
-        account = conn.execute(text("SELECT fname, lname, ssn, address, phone, username, account_number FROM users WHERE username = :username"),
+        account = conn.execute(text("SELECT fname, lname, ssn, address, phone, username, account_number, balance FROM users WHERE username = :username"),
                               {"username": username}).first()
         if account:
             account = {
@@ -104,7 +104,8 @@ def account_view_admin(username):
                 "address": account[3],
                 "phone": account[4],
                 "username": account[5],
-                "account_number": account[6]
+                "account_number": account[6],
+                "balance": account[7]
             }
             print(account)
         else:
