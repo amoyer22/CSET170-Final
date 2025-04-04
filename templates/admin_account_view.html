@@ -8,24 +8,29 @@
 <body>
     <h1>The Banking Place</h1>
     <button onclick="location.href='/admin/home'">Back</button>
-    <h2>Viewing accountname</h2>
+    <h2>Viewing {{account.username.title()}}</h2>
 
+    {% if account %}
     <div>
         <h3>General Information</h3>
         <ul>
-            <li>Full Name: fname lname</li>
-            <li>SSN: ssnnumbers</li>
-            <li>Address: addressplace</li>
-            <li>Phone: phonenumber</li>
+            <li>Full Name: {{account.fname}} {{account.lname}}</li>
+            <li>SSN: {{account.ssn}}</li>
+            <li>Address: {{account.address}}</li>
+            <li>Phone: {{account.phone}}</li>
         </ul>
     </div>
 
     <div>
         <h3>Account Information</h3>
         <ul>
-            <li>Account Username: username</li>
-            <li>Balance: $00.00</li>
+            <li>Username: {{account.username}}</li>
+            <li>Account Number: --</li>
+            <li>Balance: $0.00</li>
         </ul>
     </div>
+    {% else %}
+        <p>ERROR: No account information can be shown.</p>
+    {% endif %}
 </body>
 </html>

@@ -85,10 +85,26 @@ def home_admin():
         approveds = conn.execute(text("SELECT * FROM users WHERE approved = 'Yes' AND admin != 'Yes'")).all()
     return render_template("admin_home.html", message=message, unapproveds=unapproveds, approveds=approveds)
 
-@app.route("/admin/view/accountname")
-def account_view_admin():
-    message = None
-    return render_template("admin_account_view.html", message=message)
+@app.route("/admin/view/<username>")
+def account_view_admin(username):
+    try:
+        account = conn.execute(text("SELECT fname, lname, ssn, address, phone, username FROM users WHERE username = :username"),
+                              {"username": username}).first()
+        if account:
+            account = {
+                "fname": account[0],
+                "lname": account[1],
+                "ssn": account[2],
+                "address": account[3],
+                "phone": account[4],
+                "username": account[5]
+            }
+            print(account)
+        else:
+            account = None
+    except:
+        account = None
+    return render_template("admin_account_view.html", account=account)
 
 if __name__ == "__main__":
     app.run(debug=True)
