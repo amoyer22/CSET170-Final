@@ -21,6 +21,7 @@
                             <input type="hidden" name="approve" value="{{unapproved[0]}}">
                             <button type="submit" style="display: inline;">Approve</button>
                         </form>
+                        <button onclick="location.href='/admin/view/accountname'" style="display: inline;">View Info</button>
                     </li>
                 {% endfor %}
                 {% else %}
@@ -36,7 +37,7 @@
                 {% for approved in approveds %}
                     <li>
                         <p style="display: inline;">{{approved[6]}}</p>
-                        <button onclick="location.href='/admin/view/accountname'" style="display: inline;">View Account</button>
+                        <button onclick="location.href='/admin/view/accountname'" style="display: inline;">View Info</button>
                     </li>
                 {% endfor %}
                 {% else %}
