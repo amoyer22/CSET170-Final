@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Banking Place - My Account</title>
+</head>
+<body>
+    <h1>The Banking Place</h1>
+    <button onclick="location.href='/user/home?username={{account.username}}'">Back</button>
+    <h2>My Account</h2>
+
+    {% if account %}
+    <div>
+        <h3>General Information</h3>
+        <ul>
+            <li>Full Name: {{account.fname}} {{account.lname}}</li>
+            <li>SSN: {{account.ssn}}</li>
+            <li>Address: {{account.address}}</li>
+            <li>Phone: {{account.phone}}</li>
+        </ul>
+    </div>
+
+    <div>
+        <h3>Account Information</h3>
+        <ul>
+            <li>Username: {{account.username}}</li>
+            <li>Account Number: {{account.account_number}}</li>
+            <li>Balance: ${{account.balance}}</li>
+        </ul>
+    </div>
+    {% else %}
+        <p>ERROR: No account information available.</p>
+    {% endif %}
+</body>
+</html>

@@ -50,7 +50,7 @@ def login():
                     return redirect('/admin/home')
                 elif admin == "No":
                     if approved == "Yes":
-                        return redirect('/user/home')
+                        return redirect(f'/user/home?username={username}')
                     elif approved == "No":
                         message = "Your account has not been approved. Please wait for admin approval."
                     else:
@@ -65,8 +65,44 @@ def login():
 
 @app.route("/user/home")
 def home_user():
-    message = None
-    return render_template("user_home.html", message=message)
+    username = request.args.get("username")
+    if not username:
+        return redirect("/login")
+    try:
+        balance = conn.execute(text("SELECT balance FROM users WHERE username = :username"),
+                              {"username": username}).first()
+        if balance:
+            balance = balance[0]
+        else:
+            balance = 0.00
+    except:
+        balance = 0.00
+    return render_template("user_home.html", username=username, balance=balance)
+
+@app.route("/user/my-account")
+def my_account_user():
+    username = request.args.get("username")
+    if not username:
+        return redirect("/login")
+    try:
+        account = conn.execute(text("SELECT fname, lname, ssn, address, phone, username, account_number, balance FROM users WHERE username = :username"),
+                              {"username": username}).first()
+        if account:
+            account = {
+                "fname": account[0],
+                "lname": account[1],
+                "ssn": account[2],
+                "address": account[3],
+                "phone": account[4],
+                "username": account[5],
+                "account_number": account[6],
+                "balance": account[7]
+            }
+        else:
+            account = None
+    except:
+        account = None
+    return render_template("user_my_account.html", account=account)
 
 @app.route("/admin/home", methods = ["GET", "POST"])
 def home_admin():
