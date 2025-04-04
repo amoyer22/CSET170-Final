@@ -66,7 +66,7 @@ def login():
 @app.route("/user/home")
 def home_user():
     message = None
-    return render_template("home_user.html", message=message)
+    return render_template("user_home.html", message=message)
 
 @app.route("/admin/home", methods = ["GET", "POST"])
 def home_admin():
