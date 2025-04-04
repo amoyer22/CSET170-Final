@@ -17,7 +17,10 @@
                 {% for unapproved in unapproveds %}
                     <li>
                         <p style="display: inline;">{{unapproved[6]}}</p>
-                        <button style="display: inline;">Approve</button>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="approve" value="{{unapproved[0]}}">
+                            <button type="submit" style="display: inline;">Approve</button>
+                        </form>
                     </li>
                 {% endfor %}
                 {% else %}

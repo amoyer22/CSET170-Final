@@ -64,11 +64,25 @@ def home_user():
     message = None
     return render_template("home_user.html", message=message)
 
-@app.route("/admin/home")
+@app.route("/admin/home", methods = ["GET", "POST"])
 def home_admin():
     message = None
-    unapproveds = conn.execute(text("SELECT * FROM users WHERE approved = 'No' AND admin != 'Yes'")).all()
-    approveds = conn.execute(text("SELECT * FROM users WHERE approved = 'Yes' AND admin != 'Yes'")).all()
+    unapproveds = []
+    approveds = []
+    if request.method == "POST":
+        unapproveds = conn.execute(text("SELECT * FROM users WHERE approved = 'No' AND admin != 'Yes'")).all()
+        approveds = conn.execute(text("SELECT * FROM users WHERE approved = 'Yes' AND admin != 'Yes'")).all()
+        if request.form.get("approve"):
+            try:
+                user_id = request.form.get("approve")
+                conn.execute(text("UPDATE users SET approved = 'Yes' WHERE id = :user_id"), {"user_id": user_id})
+                conn.commit()
+                message = "User approved successfully."
+            except:
+                message = "ERROR: User approval failed."
+    else:
+        unapproveds = conn.execute(text("SELECT * FROM users WHERE approved = 'No' AND admin != 'Yes'")).all()
+        approveds = conn.execute(text("SELECT * FROM users WHERE approved = 'Yes' AND admin != 'Yes'")).all()
     return render_template("home_admin.html", message=message, unapproveds=unapproveds, approveds=approveds)
 
 @app.route("/admin/view/accountname")
