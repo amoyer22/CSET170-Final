@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from sqlalchemy import create_engine, text
+import random
 
 app = Flask(__name__)
 conn_str = "mysql://root:cset155@localhost/bank"
@@ -9,6 +10,9 @@ conn = engine.connect()
 @app.route("/")
 def index():
     return render_template("index.html")
+
+def account_num_rng():
+    return str(random.randint(1000000000, 9999999999))
 
 @app.route("/signup", methods = ["GET", "POST"])
 def signup():
@@ -75,7 +79,9 @@ def home_admin():
         if request.form.get("approve"):
             try:
                 user_id = request.form.get("approve")
-                conn.execute(text("UPDATE users SET approved = 'Yes' WHERE id = :user_id"), {"user_id": user_id})
+                account_number = account_num_rng()
+                conn.execute(text("UPDATE users SET approved = 'Yes', account_number = :account_number WHERE id = :user_id"),
+                            {"user_id": user_id, "account_number": account_number})
                 conn.commit()
                 message = "User approved successfully."
             except:
@@ -88,7 +94,7 @@ def home_admin():
 @app.route("/admin/view/<username>")
 def account_view_admin(username):
     try:
-        account = conn.execute(text("SELECT fname, lname, ssn, address, phone, username FROM users WHERE username = :username"),
+        account = conn.execute(text("SELECT fname, lname, ssn, address, phone, username, account_number FROM users WHERE username = :username"),
                               {"username": username}).first()
         if account:
             account = {
@@ -97,7 +103,8 @@ def account_view_admin(username):
                 "ssn": account[2],
                 "address": account[3],
                 "phone": account[4],
-                "username": account[5]
+                "username": account[5],
+                "account_number": account[6]
             }
             print(account)
         else:
