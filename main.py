@@ -7,12 +7,12 @@ conn_str = "mysql://root:cset155@localhost/bank"
 engine = create_engine(conn_str)
 conn = engine.connect()
 
+def account_num_rng():
+    return str(random.randint(1000000000, 9999999999))
+
 @app.route("/")
 def index():
     return render_template("index.html")
-
-def account_num_rng():
-    return str(random.randint(1000000000, 9999999999))
 
 @app.route("/signup", methods = ["GET", "POST"])
 def signup():
@@ -103,6 +103,32 @@ def my_account_user():
     except:
         account = None
     return render_template("user_my_account.html", account=account)
+
+@app.route("/user/add-funds", methods=["GET", "POST"])
+def add_funds_user():
+    message = None
+    if request.method == "GET":
+        username = request.args.get("username")
+        if not username:
+            return redirect("/login")
+        return render_template("user_add_funds.html", username=username)
+    elif request.method == "POST":
+        username = request.form.get("username")
+        amount = request.form.get("amount")
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                message = "Amount must be greater than 0."
+        except:
+            message = "ERROR: Invalid amount."
+        try:
+            conn.execute(text("UPDATE users SET balance = balance + :amount WHERE username = :username"),
+                        {"amount": amount, "username": username})
+            conn.commit()
+            return redirect(f"/user/home?username={username}")
+        except:
+            message = "ERROR: Funds could not be added."
+            return render_template("user_add_funds.html", message=message, username=username)
 
 @app.route("/admin/home", methods = ["GET", "POST"])
 def home_admin():

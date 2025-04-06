@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Banking Place - Add Funds</title>
+</head>
+<body>
+    <h1>The Banking Place</h1>
+    <button onclick="location.href='/user/home?username={{username}}'">Back</button>
+    <h2>Add Funds</h2>
+
+    {% if message %}
+        <p>{{message}}</p>
+    {% endif %}
+
+    <form method="POST" action="/user/add-funds">
+        <input type="hidden" name="username" value="{{username}}">
+        <input type="text" name="card_number" style="display: block;" placeholder="Card Number" autocomplete="off" required>
+        <br>
+        <input type="text" name="card_expiry" style="display: block;" placeholder="MM/YY" autocomplete="off" required>
+        <br>
+        <input type="text" name="ccv" style="display: block;" placeholder="CCV" autocomplete="off" required>
+        <br>
+        <input type="text" name="amount" style="display: block;" placeholder="Amount" autocomplete="off" required>
+        <br>
+        <button type="submit" style="display: block;">Add Funds</button>
+    </form>
+</body>
+</html>
