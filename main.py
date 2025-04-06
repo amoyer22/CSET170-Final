@@ -129,6 +129,16 @@ def add_funds_user():
         except:
             message = "ERROR: Funds could not be added."
             return render_template("user_add_funds.html", message=message, username=username)
+        
+@app.route("/user/send-funds", methods=["GET", "POST"])
+def send_funds_user():
+    message = None
+    if request.method == "GET":
+        username = request.args.get("username")
+        if not username:
+            return redirect("/login")
+        return render_template("user_send_funds.html", username=username)
+    return render_template("user_send_funds.html", message=message, username=username)
 
 @app.route("/admin/home", methods = ["GET", "POST"])
 def home_admin():
