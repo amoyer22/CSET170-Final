@@ -1,0 +1,26 @@
+CREATE DATABASE bank;
+USE bank;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fname VARCHAR(50) NOT NULL,
+    lname VARCHAR(50) NOT NULL,
+    ssn VARCHAR(11) NOT NULL UNIQUE,
+    address VARCHAR(255) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    approved ENUM('Yes', 'No') NOT NULL DEFAULT 'No',
+    admin ENUM('Yes', 'No') NOT NULL DEFAULT 'No',
+    account_number VARCHAR(20) UNIQUE,
+    balance DECIMAL(10, 2) DEFAULT 0.00
+);
+SELECT * FROM users;
+
+INSERT INTO USERS (fname, lname, ssn, address, phone, username, password, approved, admin, account_number, balance)
+VALUES ('Admin', 'Admin', '000-00-0000', 'Address', '000-000-0000', 'admin', 'securepassword', 'Yes', 'Yes', 0000000000, 0.00),
+('Jane', 'Doe', '123-45-6789', 'Some Place', '555-555-5555', 'username1', 'password123', 'Yes', 'No', 3685224360, 89.00),
+('John', 'Guy', '444-44-4444', 'Cool Town', '444-444-4444', 'username2', 'password456', 'Yes', 'No', 2042585739, 1000.00),
+('Mike', 'Williams', '777-88-9999', 'Different Place', '777-888-9999', 'coolusername', 'password789', 'Yes', 'No', 6606133419, 782.32),
+('Becky', 'Person', '888-88-8888', 'Other Area', '888-888-8888', 'beckyperson1', 'beckypassword', 'No', 'No', NULL, 0.00),
+('New', 'Person', '111-11-1111', 'New Place', '111-111-1111', 'newperson', 'newpassword', 'No', 'No', NULL, 0.00);

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Banking Place - ADMIN Home</title>
+</head>
+<body>
+    <h1>The Banking Place</h1>
+    <button onclick="location.href='/'">Log Out</button>
+    <h2>ADMIN Home</h2>
+
+    <div>
+        <h3>Unapproved Accounts</h3>
+        <ul>
+            {% if unapproveds %}
+                {% for unapproved in unapproveds %}
+                    <li>
+                        <p style="display: inline;">{{unapproved[6]}}</p>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="approve" value="{{unapproved[0]}}">
+                            <button type="submit" style="display: inline;">Approve</button>
+                        </form>
+                        <button onclick="location.href='/admin/view/{{unapproved[6]}}'" style="display: inline;">View Info</button>
+                    </li>
+                {% endfor %}
+                {% else %}
+                    <p>No accounts need approved at this time.</p>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div>
+        <h3>Approved Accounts</h3>
+        <ul>
+            {% if approveds %}
+                {% for approved in approveds %}
+                    <li>
+                        <p style="display: inline;">{{approved[6]}}</p>
+                        <button onclick="location.href='/admin/view/{{approved[6]}}'" style="display: inline;">View Info</button>
+                    </li>
+                {% endfor %}
+                {% else %}
+                    <p>No accounts have been approved.</p>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+</html>

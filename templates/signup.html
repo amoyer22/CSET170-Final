@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Banking Place - Sign Up</title>
+</head>
+<body>
+    <h1>The Banking Place</h1>
+    <button onclick="location.href='/'">Back</button>
+    <h2>Sign Up</h2>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <form method="POST" action="/signup">
+        <div>
+            <input type="text" name="fname" style="display: block;" placeholder="First Name" maxlength="50" autocomplete="off">
+            <br>
+            <input type="text" name="lname" style="display: block;" placeholder="Last Name" maxlength="50" autocomplete="off">
+            <br>
+            <input type="text" name="ssn" style="display: block;" placeholder="SSN" maxlength="11" autocomplete="off">
+            <br>
+            <input type="text" name="address" style="display: block;" placeholder="Address" maxlength="255" autocomplete="off">
+            <br>
+            <input type="text" name="phone" style="display: block;" placeholder="Phone Number" maxlength="15" autocomplete="off">
+        </div>
+
+        <br>
+
+        <div>
+            <input type="text" name="username" style="display: block;" placeholder="Username" maxlength="50" autocomplete="off">
+            <br>
+            <input type="password" name="password" style="display: block;" placeholder="Password" maxlength="255" autocomplete="off">
+        </div>
+        
+        <br>
+
+        <input type="submit" value="Sign Up" style="display: block;">
+    </form>
+</body>
+</html>
