@@ -104,7 +104,7 @@ def my_account_user():
         account = None
     return render_template("user_my_account.html", account=account)
 
-@app.route("/user/add-funds", methods=["GET", "POST"])
+@app.route("/user/add-funds", methods = ["GET", "POST"])
 def add_funds_user():
     message = None
     if request.method == "GET":
@@ -118,7 +118,7 @@ def add_funds_user():
         try:
             amount = float(amount)
             if amount <= 0:
-                message = "Amount must be greater than 0."
+                message = "ERROR: Amount must be greater than 0."
         except:
             message = "ERROR: Invalid amount."
         try:
@@ -130,7 +130,7 @@ def add_funds_user():
             message = "ERROR: Funds could not be added."
             return render_template("user_add_funds.html", message=message, username=username)
         
-@app.route("/user/send-funds", methods=["GET", "POST"])
+@app.route("/user/send-funds", methods = ["GET", "POST"])
 def send_funds_user():
     message = None
     if request.method == "GET":
@@ -138,7 +138,40 @@ def send_funds_user():
         if not username:
             return redirect("/login")
         return render_template("user_send_funds.html", username=username)
-    return render_template("user_send_funds.html", message=message, username=username)
+    elif request.method == "POST":
+        username = request.form.get("username")
+        recipient_account_number = request.form.get("account_number")
+        amount = request.form.get("amount")
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                message = "ERROR: Amount must be greater than 0."
+                return render_template("user_send_funds.html", username=username, message=message)
+        except ValueError:
+            message = "ERROR: Invalid amount entered."
+            return render_template("user_send_funds.html", username=username, message=message)
+        try:
+            recipient = conn.execute(text("SELECT username, balance FROM users WHERE account_number = :account_number"),
+                                     {"account_number": recipient_account_number}).first()
+            if not recipient:
+                message = "ERROR: Recipient account does not exist."
+                return render_template("user_send_funds.html", username=username, message=message)
+            sender = conn.execute(text("SELECT balance FROM users WHERE username = :username"),
+                                 {"username": username}).first()
+            if not sender or sender[0] < amount:
+                message = "ERROR: Insufficient funds."
+                return render_template("user_send_funds.html", username=username, message=message)
+            conn.execute(text("UPDATE users SET balance = balance - :amount WHERE username = :sender_username"),
+                        {"amount": amount, "sender_username": username})
+            conn.execute(text("UPDATE users SET balance = balance + :amount WHERE account_number = :recipient_account_number"),
+                        {"amount": amount, "recipient_account_number": recipient_account_number})
+            conn.commit()
+            return redirect(f"/user/home?username={username}")
+        except:
+            print("ERROR: Sending funds function failed.")
+            message = "ERROR: An error occurred during the transfer."
+            return render_template("user_send_funds.html", username=username, message=message)
+    return render_template("user_send_funds.html", username=username, message=message)
 
 @app.route("/admin/home", methods = ["GET", "POST"])
 def home_admin():
